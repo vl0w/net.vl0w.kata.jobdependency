@@ -25,9 +25,15 @@ public class JobOrderer {
 		if (!orderedJobs.toString().contains(job)) {
 			if (hasDependantJob(job, jobDependencies)) {
 				String dependantJob = getDependantJob(job, jobDependencies);
+				if (job.equals(dependantJob)) {
+					throw new IllegalArgumentException(
+							"Self referencing dependency");
+				}
+
 				buildOrderedJobWithDependencies(orderedJobs, dependantJob,
 						jobDependencies);
 			}
+
 			orderedJobs.append(job);
 		}
 		return orderedJobs.toString();

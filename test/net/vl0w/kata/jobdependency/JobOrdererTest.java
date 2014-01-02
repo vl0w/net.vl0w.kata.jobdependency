@@ -32,6 +32,16 @@ public class JobOrdererTest {
 		assertEquals("aecbd", orderJobs("a", "b=>c", "c=>e", "d=>a", "e"));
 	}
 
+	@Test(expected = IllegalArgumentException.class)
+	public void multipleJobs_SelfReferencingDependency() {
+		orderJobs("a", "b", "c=>c");
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void multipleJobs_CircularDependency() {
+		orderJobs("a", "b=>c", "c=>d", "d=>b", "e");
+	}
+
 	private String orderJobs(String... jobs) {
 		return JobOrderer.orderJobs(jobs);
 	}
